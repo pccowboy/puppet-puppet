@@ -9,3 +9,11 @@
 [<%= env %>]
     modulepath = <%= scope.lookupvar("puppet::params::modules_path") %>/<%= env %>:<%= scope.lookupvar("puppet::params::common_modules_path") %>
 <% end -%>
+
+[puppetmasterd]
+storeconfigs = true
+dbadapter = mysql
+dbuser = puppet
+dbpassword = password
+dbserver = localhost
+dbsocket = /var/run/mysqld/mysqld.sock
