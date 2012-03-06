@@ -3,7 +3,7 @@ class puppet::server::install {
   package { 'mysql-devel': ensure => installed }
   package { 'ruby-devel': ensure => '1.8.7.352-1.8.amzn1'}
   package { 'activerecord': ensure => installed, provider => gem }
-#  package { 'activerecord-mysql-adapter': ensure => installed, provider => gem }
+  package { 'mysql': ensure => installed, provider => gem }
   
   service { "puppet":
   	enable 	=> true,
