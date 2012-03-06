@@ -15,6 +15,6 @@ class puppet::server::install {
 	  password => 'password',
 	  host     => 'localhost',
 	  grant    => ['all'],
-	  sql      => 'echo "create index exported_restype_title on resources (exported, restype, title(50));"',
+	  sql      => '/bin/echo "create index exported_restype_title on resources (exported, restype, title(50));"',
 	}
 }
