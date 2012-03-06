@@ -10,10 +10,10 @@ class puppet::server::install {
   class { 'mysql': }
   
   mysql::db { 'puppet':
-	  user     => 'puppet@localhost',
+	  user     => 'puppet',
 	  password => 'password',
 	  host     => 'localhost',
 	  grant    => ['all'],
-	  sql      => 'create index exported_restype_title on resources (exported, restype, title(50));',
+	  sql      => 'echo "create index exported_restype_title on resources (exported, restype, title(50));"',
 	}
 }
