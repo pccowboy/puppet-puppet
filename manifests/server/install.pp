@@ -8,7 +8,7 @@ class puppet::server::install {
   	enable 	=> true,
   	ensure 	=> running,
   	name 	=> "puppet",
-  	require => [Package["puppet"], Package["mysql"], Service["puppetmaster"], mysql::db["puppet"]],
+  	require => [Package["puppet"], Package["mysql"], Service["puppetmaster"], Mysql::db["puppet"]],
   	subscribe => Service["puppetmaster"],
   }
   
@@ -23,7 +23,7 @@ class puppet::server::install {
     command => "/etc/init.d/puppetmaster start; sleep 10; /usr/sbin/puppetd -d -t; /etc/init.d/puppetmaster stop",
     path	=> "/bin:/usr/bin:/usr/sbin",
     creates => "/var/lib/puppet/ssl/certs/puppet.${domain}.pem",
-    require => [Service["puppetmaster"], mysql::db["puppet"]],
+    require => [Service["puppetmaster"], Mysql::db["puppet"]],
     notify  => Service["puppet"],
     before	=> [Exec["db-index"], Package["foreman"]],
     logoutput => true,
@@ -34,7 +34,7 @@ class puppet::server::install {
     refreshonly => true,
     path		=> "/bin:/usr/bin",
     require		=> Service["puppet"],
-    subscribe	=> mysql::db["puppet"],
+    subscribe	=> Exec["puppetmaster-run-once"],
   }
     
   class { 'mysql::server':
