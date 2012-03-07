@@ -22,13 +22,13 @@ class puppet::server::install {
   exec { "puppetmaster-run-once":
     command => "/etc/init.d/puppetmaster start && /etc/init.d/puppetmaster stop",
     creates => "/var/lib/puppet/ssl/certs/puppet.${domain}.pem",
-    require => Service["puppetmaster"],
+    require => [Service["puppetmaster"],mysql::db["puppet"]],
     notify  => Service["puppet"],
   }
     
   class { 'mysql::server':
   	config_hash => { 'root_password' => 'password' },
-  	before => mysql::db["puppet"],
+  	require => Service["mysqld"],
   }
 
   class { 'mysql': }
@@ -38,7 +38,5 @@ class puppet::server::install {
 	  password => 'password',
 	  host     => 'localhost',
 	  grant    => ['all'],
-	  sql      => '/bin/echo "use puppet; create index exported_restype_title on resources (exported, restype, title(50));"',
-	  before   => Exec["puppetmaster-run-once"],
 	}
 }
