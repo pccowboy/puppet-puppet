@@ -8,7 +8,7 @@ class puppet::server::install {
   	enable 	=> true,
   	ensure 	=> running,
   	name 	=> "puppet",
-  	require => [Package["puppet"], Package["mysql"], Service["puppetmaster"]],
+  	require => [Package["puppet"], Package["mysql"], Service["puppetmaster"], mysql::db["puppet"]],
   	subscribe => Service["puppetmaster"],
   }
   
@@ -22,8 +22,16 @@ class puppet::server::install {
   exec { "puppetmaster-run-once":
     command => "/etc/init.d/puppetmaster start && /etc/init.d/puppetmaster stop",
     creates => "/var/lib/puppet/ssl/certs/puppet.${domain}.pem",
-    require => [Service["puppetmaster"],mysql::db["puppet"]],
+    require => [Service["puppetmaster"], mysql::db["puppet"]],
     notify  => Service["puppet"],
+  }
+
+  exec{"db-index":
+  	command		=> 'echo "use puppet; create index exported_restype_title on resources (exported, restype, title(50));" | mysql -u puppet -ppassword puppet',
+    refreshonly => true,
+    path		=> "/bin:/usr/bin",
+    require		=> Service["puppet"],
+    subscribe	=> mysql::db["puppet"],
   }
     
   class { 'mysql::server':
