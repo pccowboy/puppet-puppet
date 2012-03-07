@@ -19,9 +19,11 @@ class puppet::server::install {
   }
 
   exec { "puppetmaster-run-once":
-    command => "service puppetmaster start && service puppetmaster stop",
+    command => "/etc/init.d/puppetmaster start && /etc/init.d/puppetmaster stop",
     creates => "/var/lib/puppet/ssl/certs/puppet.${domain}.pem",
     require => Service["puppetmaster"],
+    refreshonly => true,
+    subscribe => Package["puppet-server"],
   }
     
   class { 'mysql::server':
