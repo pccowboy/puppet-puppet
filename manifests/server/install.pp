@@ -36,7 +36,6 @@ class puppet::server::install {
     
   class { 'mysql::server':
   	config_hash => { 'root_password' => 'password' },
-  	require => Service["mysqld"],
   }
 
   class { 'mysql': }
