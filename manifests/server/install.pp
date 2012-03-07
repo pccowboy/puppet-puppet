@@ -20,10 +20,12 @@ class puppet::server::install {
   }
 
   exec { "puppetmaster-run-once":
-    command => "/etc/init.d/puppetmaster start && /etc/init.d/puppetmaster stop",
+    command => "/etc/init.d/puppetmaster start && puppetd -d -t && /etc/init.d/puppetmaster stop",
+    path	=> "/bin:/usr/bin:/usr/sbin",
     creates => "/var/lib/puppet/ssl/certs/puppet.${domain}.pem",
     require => [Service["puppetmaster"], mysql::db["puppet"]],
     notify  => Service["puppet"],
+    before	=> Exec["db-index"],
   }
 
   exec{"db-index":
