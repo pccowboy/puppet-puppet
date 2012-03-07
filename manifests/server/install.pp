@@ -17,7 +17,13 @@ class puppet::server::install {
   	name 	=> "puppetmaster",
   	require => [Package["puppet-server"], Package["mysql"]],
   }
-  
+
+  exec { "puppetmaster-run-once":
+    command => "service puppetmaster start && service puppetmaster stop",
+    creates => "/var/lib/puppet/ssl/certs/puppet.${domain}.pem",
+    require => Service["puppetmaster"],
+  }
+    
   class { 'mysql::server':
   	config_hash => { 'root_password' => 'password' }
   }
