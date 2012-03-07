@@ -9,7 +9,7 @@ class puppet::server::install {
   	ensure 	=> running,
   	name 	=> "puppet",
   	require => [Package["puppet"], Package["mysql"], Service["puppetmaster"]],
-  	subscribe => Service["puppetmaster-run-once"],
+  	subscribe => Service["puppetmaster"],
   }
   
   service { "puppetmaster":
