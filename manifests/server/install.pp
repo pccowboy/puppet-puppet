@@ -26,6 +26,7 @@ class puppet::server::install {
     require => [Service["puppetmaster"], mysql::db["puppet"]],
     notify  => Service["puppet"],
     before	=> [Exec["db-index"], Package["foreman"]],
+    logoutput => true,
   }
 
   exec{"db-index":
