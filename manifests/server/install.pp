@@ -23,7 +23,7 @@ class puppet::server::install {
   exec { "puppetmaster-run-once":
     command => "/etc/init.d/puppetmaster start; sleep 10; /usr/sbin/puppetd -d -t; /etc/init.d/puppetmaster stop",
     path	=> "/bin:/usr/bin:/usr/sbin",
-    require => [Service["puppetmaster"]],
+    require => [Service["puppetmaster"], mysql::db['puppet']],
     notify  => Service["puppet"],
     before	=> [Exec["db-index"], Package["foreman"]],
     logoutput => true,
@@ -48,6 +48,5 @@ class puppet::server::install {
 	  password => 'password',
 	  host     => 'localhost',
 	  grant    => ['all'],
-	  before   => Exec["db-index"],
 	}
 }
