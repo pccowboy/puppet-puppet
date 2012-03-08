@@ -21,7 +21,7 @@ class puppet::server::install {
   }
 
   exec { "puppetmaster-run-once":
-    command => "/etc/init.d/puppetmaster start; sleep 10; /usr/sbin/puppetd -d -t; /etc/init.d/puppetmaster stop",
+    command => "/etc/init.d/puppetmaster start; sleep 10; /usr/sbin/puppetd -d -t; /usr/sbin/puppetd -d -t; /etc/init.d/puppetmaster stop",
     path	=> "/bin:/usr/bin:/usr/sbin",
     require => [Service["puppetmaster"], mysql::db['puppet']],
     notify  => Service["puppet"],
